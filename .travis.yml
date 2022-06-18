@@ -6,18 +6,17 @@ matrix:
   include:
     - node_js: "12"
 cache:
-  directories: [node_modules]
+  directories:
+    - node_modules
 install: npm
 after_success: npm coverage
 before_script:
-  - psql -c 'create database testdb;' -U postgres
-    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-    - chmod +x ./cc-test-reporter
-    - ./cc-test-reporter before-build
+  - psql -c 'create database testdb;' -U postgres - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+    > ./cc-test-reporter - chmod +x ./cc-test-reporter - ./cc-test-reporter before-build
 script:
   - npm test
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESUL
+  - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESUL"
 services:
   - postgresql
 addons:
@@ -29,3 +28,9 @@ addons:
 before_install:
   - sudo cp /etc/postgresql/{9.6,10}/main/pg_hba.conf
   - sudo /etc/init.d/postgresql restart
+deploy:
+  provider: heroku
+  app:
+    main: app-name
+  api_key:
+    secure: hiji27SNsLzomLSBXw5ot8NfabWlOi1ZLVMA80zGO7niReET0Bj0Qw+Yr4EyZNJ7WPHCu9Hqd0arpvua98dSZKYEIZwuhpWsNL5wETfsd6rV1w4a/K2oz2Ltq/N64gASYL15F1iuDlFrZq9CHHvk7/kXXgfruqZUdK0CsUkMS54nDz4PKqrwIbdN/NZfw9axzOpOR9TUfeZfdCJ/TkXEYtUsl8WyqFprwgqtylYN07gSkIYtvN+qHXAaCv7d6LsGAndmTH4ZR/2SrHf1N+pxuWsenVV1inHCc/kchryUrRBBgcSK5bVnnyldrIrG8OVPOGyUoxEGQtufiC6zG20yi39XH7hD6tOzRXRNAqpFVPjO1kL3rbkRNPB32msdjL/d2bFSfk8klj/zrbMe9WJL1RBijKF5cfnznHCbV4tubfBBnlWUb8q3jf9K5KovPnmEqkBpT6sTbTX9gMC3XUIBzbxff4FqFmerLDa12ZtK9kDK1f+8O8OSMeLodhKG5t4cCffVDIw44ouAxZa+Lr6lE7dRKMB5pGkEV/OGijAm4qJZV/36rYENTCz8Y+edU+sbWb17z3eThXcyPCAunFt2cViG/1vbRaVm0NwobPFdsTEMgeC6MvPqUuaawBOukgqQxrIjhObRU5NAGCfL1AFIye7AdLOqsMAGszI1ZpOTojg=
